@@ -7,6 +7,16 @@ separate password and fingerprint PAM flows.
 Built by forking Omarchy's built-in `omarchy.lock` service. It replaces the
 built-in lock screen when enabled; removing it restores the original.
 
+## What's different from upstream
+
+Fork of [`shmall03/omarchy-shmall.lock-plugin`](https://github.com/shmall03/omarchy-shmall.lock-plugin):
+
+- 12-hour clock instead of 24-hour
+- No greeting text
+- Stronger wallpaper blur/scrim behind the lock view
+- Thicker password field border
+- "Password" placeholder in the password field
+
 ## Features
 
 - Now-playing title and artist from MPRIS players (e.g. music apps in the tray)
@@ -22,12 +32,13 @@ built-in lock screen when enabled; removing it restores the original.
 ## Install
 
 ```sh
-omarchy plugin add https://github.com/shmall03/omarchy-shmall.lock-plugin.git --enable
+omarchy plugin add https://github.com/zaheen4/omarchy-shmall.lock-plugin.git --enable --yes
 ```
 
 The plugin is enabled with `clonedFrom: omarchy.lock`, so the shell
 automatically disables the built-in lock screen. Lock with your normal keybind
-or `omarchy system lock`.
+or `omarchy system lock`. `omarchy plugin update shmall.lock` pulls future
+changes from this fork.
 
 ## Requirements
 
