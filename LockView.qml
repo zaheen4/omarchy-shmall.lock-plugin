@@ -129,7 +129,7 @@ Item {
       blur: 0.35
       blurMax: 128
       blurMultiplier: 1.0
-      contrast: 0.88
+      contrast: 0.0
     }
 
     // Extra dim so foreground text reads clearly over any wallpaper.
