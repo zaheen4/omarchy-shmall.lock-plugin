@@ -34,6 +34,7 @@ Item {
   property string lastEventAt: ""
   property bool strandedLock: false
   property bool strandedLockResolved: false
+  property int blankDelayMs: 5000
 
   readonly property bool locked: lockRequested || sessionLock.locked || sessionLock.secure
   readonly property bool authenticating: authenticatingPassword || fingerprintAuthenticating
@@ -158,6 +159,7 @@ Item {
 
     resetAuthenticationState()
     lockRequested = true
+    armBlankTimer()
     logEvent("lock-requested")
     queueSessionLock()
 
@@ -176,6 +178,7 @@ Item {
     pendingSessionLock = false
     sessionLockStabilizeTimer.stop()
     pendingSessionLockTimer.stop()
+    idleBlankTimer.stop()
     resetAuthenticationState()
     sessionLock.locked = false
     logEvent("unlocked")
@@ -184,6 +187,16 @@ Item {
 
   function runWake() {
     if (!wakeProcess.running) wakeProcess.running = true
+    if (lockRequested) armBlankTimer()
+  }
+
+  function armBlankTimer() {
+    idleBlankTimer.armedAt = Date.now()
+    idleBlankTimer.restart()
+  }
+
+  function runBlank() {
+    if (!blankProcess.running) blankProcess.running = true
   }
 
   function submitPassword(value) {
@@ -425,6 +438,31 @@ Item {
   Process {
     id: wakeProcess
     command: ["bash", "-c", "omarchy-system-wake"]
+  }
+
+  Process {
+    id: blankProcess
+    command: ["bash", "-c", "omarchy-brightness-keyboard off; omarchy-brightness-display off"]
+  }
+
+  Timer {
+    id: idleBlankTimer
+    interval: root.blankDelayMs
+    repeat: false
+    property double armedAt: 0
+    onTriggered: {
+      // A countdown frozen by suspend fires right after resume, which would
+      // blank the freshly woken unlock screen under the user. Wall-clock time
+      // exposes the gap: take a fresh run-up instead of blanking.
+      if (Date.now() - armedAt > interval + 2000) {
+        root.armBlankTimer()
+        return
+      }
+      // Only a password check in flight should hold the display up. The
+      // fingerprint PAM stays armed for the whole lock, so gating on
+      // `authenticating` here would keep the panel lit until unlock.
+      if (root.lockRequested && !root.authenticatingPassword) root.runBlank()
+    }
   }
 
   Timer {

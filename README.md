@@ -27,7 +27,8 @@ Fork of [`shmall03/omarchy-shmall.lock-plugin`](https://github.com/shmall03/omar
   fingerprint is enrolled
 - Blurred wallpaper background, Hyprland-driven corners, theme-aware colors
 - Safe stranded-lock recovery, mirroring the built-in
-- Display stays on while locked (no auto-blank)
+- Auto-blanks the display and keyboard backlight 5s after locking; any key or
+  mouse movement wakes and re-arms it
 
 ## Install
 
