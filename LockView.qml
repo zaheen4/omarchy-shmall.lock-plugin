@@ -21,10 +21,10 @@ Item {
   property string passwordText: ""
   property bool syncingPasswordText: false
 
-  readonly property string placeholderText: "Enter Password"
+  readonly property string placeholderText: "Password"
   readonly property int fieldWidth: 420
   readonly property int fieldHeight: 64
-  readonly property int outlineThickness: 1
+  readonly property int outlineThickness: 2
   readonly property int fieldRadius: 8
   readonly property int fieldFontSize: Math.round(Style.font.heading * 1.125)
   readonly property int passwordDotFontSize: Math.round(Style.font.heading * 1.33)
@@ -74,7 +74,7 @@ Item {
   }
 
   function refreshClock() {
-    clockTime.text = Qt.formatDateTime(new Date(), "HH:mm")
+    clockTime.text = Qt.formatDateTime(new Date(), "h:mm AP")
     clockDate.text = Qt.formatDateTime(new Date(), "dddd d MMMM")
   }
 
@@ -126,7 +126,7 @@ Item {
       source: wallpaper
       autoPaddingEnabled: false
       blurEnabled: root.loadBackground && wallpaper.status === Image.Ready
-      blur: 0.35
+      blur: 0.55
       blurMax: 128
       blurMultiplier: 1.0
       contrast: 0.0
@@ -136,7 +136,7 @@ Item {
     Rectangle {
       anchors.fill: parent
       color: Color.background
-      opacity: 0.3
+      opacity: 0.45
     }
 
     MouseArea {
@@ -160,18 +160,6 @@ Item {
       rightPadding: 16
 
       Text {
-        id: greeting
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: root.userName.length > 0
-        text: "Welcome back, " + root.userName
-        color: Color.lock.placeholder
-        font.family: Style.font.family
-        font.pixelSize: Style.font.body
-        font.weight: Font.Normal
-        horizontalAlignment: Text.AlignHCenter
-      }
-
-      Text {
         id: clockTime
         anchors.horizontalCenter: parent.horizontalCenter
         text: ""
@@ -186,7 +174,7 @@ Item {
         id: clockDate
         anchors.horizontalCenter: parent.horizontalCenter
         text: ""
-        color: Color.lock.placeholder
+        color: Color.lock.text
         font.family: Style.font.family
         font.pixelSize: Style.font.subtitle
         horizontalAlignment: Text.AlignHCenter
